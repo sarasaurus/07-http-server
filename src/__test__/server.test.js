@@ -8,14 +8,14 @@ beforeAll(() => server.start(5000));
 afterAll(() => server.stop());
 
 describe('VALID request to the API', () => {
-  describe.only('GET /api/cowsay', () => {
+  describe('GET /api/cowsay', () => {
     it('should response with a status 200', () => {
       return superagent.get(':5000/api/cowsay?text=poop')
         .then((res) => {
-          expect(res.status).toEqual(200);
-          expect(res.body).toHaveProperty('body');
           console.log(res.body, '-------response body');
           console.log(res.content, '-------response content');
+          expect(res.status).toEqual(200);
+          expect(res.body).toHaveProperty('content');
         });
     });
   });
@@ -33,13 +33,17 @@ describe('VALID request to the API', () => {
     });
   });
   
-  describe('POST /echo', () => {
+  describe.only('POST /api/cowsay', () => {
+    // const mockCow = cowsay.say({ text: 'poop' });
     it('should return status 200 for successful post', () => {
-      return superagent.post(':5000/echo')
+      return superagent.post(':5000/api/cowsay')
       // .set('Content-Type', 'application/json')
-        .send({ name: 'judy' })
+        .send({ text: 'poop' })
+        .send({ content: 'COW' })
         .then((res) => {
-          expect(res.body.name).toEqual('judy');
+            console.log(res.body, 'RES BODY');
+          expect(res.body.text).toEqual('poop');
+          expect(res.body.content).toEqual('COW');
           expect(res.status).toEqual(200);
         });
     });

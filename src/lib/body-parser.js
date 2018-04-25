@@ -20,6 +20,7 @@ module.exports = function bodyParser(req) {
     req.on('end', () => {
       try {
         req.body = JSON.parse(message);// everything together-- once all is received
+        console.log('body-parser, what req-body: ', req.body);
         return resolve(req);
       } catch (err) {
         return reject(err);

@@ -8,7 +8,6 @@ const faker = require('faker');
 const server = module.exports = {};
 
 const app = http.createServer((req, res) => {
-
   bodyParser(req)
     .then((parsedRequest) => {
     //   if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/time') {
@@ -22,29 +21,38 @@ const app = http.createServer((req, res) => {
 
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/cowsay') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        let cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
+        const cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
         res.write(`<section><pre>${cowsayText}</pre></section>`);
         res.end();
         return undefined;
-      }//this one is working
+      }// this one is working
 
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/api/cowsay') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        let cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
+        const cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
         res.write(JSON.stringify({
           content: `${cowsayText}`,
         }));
         res.end();
         return undefined;
-      }//
+      }// this one is working
 
       if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify(parsedRequest.body));
-        console.log(parsedRequest.body);
+        res.write(JSON.stringify(parsedRequest.body));// defining the object we recieve
+        // res.write(JSON.stringify(parsedRequest.body.content));
+        
+        const cowsayText = cowsay.say({ text: parsedRequest.body.text });// selecting the part of that object we want
+        res.write(JSON.stringify({
+          content: `${cowsayText}`,
+        }));
+        
+        console.log('server log', parsedRequest.body);// 
+        // console.log('server log cow ', cowsayText);
         res.end();
         return undefined;
-      }
+      }// this is working
+      
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('NOT FOUND');
       res.end();
