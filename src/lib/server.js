@@ -10,15 +10,6 @@ const server = module.exports = {};
 const app = http.createServer((req, res) => {
   bodyParser(req)
     .then((parsedRequest) => {
-    //   if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/time') {
-    //     res.writeHead(200, { 'Content-Type': 'application/json' });
-    //     res.write(JSON.stringify({
-    //       date: new Date(),
-    //     }));
-    //     res.end();
-    //     return undefined;
-    //   }// if GET
-
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/cowsay') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
         const urlPath = parsedRequest.url.pathname;
@@ -44,7 +35,7 @@ const app = http.createServer((req, res) => {
       }// this one is working
 
       if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
-        console.log('server log', parsedRequest.body);// 
+        // console.log('server log', parsedRequest.body);// 
         if (!parsedRequest.body.text) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify({ error: 'invalid request: text query required' }));
@@ -60,7 +51,7 @@ const app = http.createServer((req, res) => {
           content: `${cowsayText}`,
         }));
         
-        console.log('server log', parsedRequest.body);// 
+        // console.log('server log', parsedRequest.body);// 
         // console.log('server log cow ', cowsayText);
         res.end();
         return undefined;
