@@ -21,8 +21,14 @@ const app = http.createServer((req, res) => {
 
       if (parsedRequest.method === 'GET' && parsedRequest.url.pathname === '/cowsay') {
         res.writeHead(200, { 'Content-Type': 'text/html' });
-        const cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
-        res.write(`<section><pre>${cowsayText}</pre></section>`);
+        const urlPath = parsedRequest.url.pathname;
+        if (urlPath) {
+          const cowsayText = cowsay.say({ text: parsedRequest.url.query.text });
+          res.write(`<section><pre>${cowsayText}</pre></section>`);
+        }
+        const newText = cowsay.say({ text: faker.random.word });
+        res.write(`<section><pre>${newText}</pre></section>`);
+
         res.end();
         return undefined;
       }// this one is working
@@ -72,7 +78,7 @@ const app = http.createServer((req, res) => {
         res.end();
         return undefined;  
       }
-        console.log(err instanceof SyntaxError, 'error');
+      console.log(err instanceof SyntaxError, 'error');
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('BAD REQUEST', err);
       res.end();
