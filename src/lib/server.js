@@ -38,6 +38,13 @@ const app = http.createServer((req, res) => {
       }// this one is working
 
       if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
+        console.log('server log', parsedRequest.body);// 
+        if (!parsedRequest.body.text) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.write(JSON.stringify({ error: 'invalid request: text query required' }));
+          res.end();
+          return undefined;  
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.write(JSON.stringify(parsedRequest.body));// defining the object we recieve
         // res.write(JSON.stringify(parsedRequest.body.content));
@@ -51,7 +58,7 @@ const app = http.createServer((req, res) => {
         // console.log('server log cow ', cowsayText);
         res.end();
         return undefined;
-      }// this is working
+      }// api post is working
       
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.write('NOT FOUND');
@@ -59,6 +66,13 @@ const app = http.createServer((req, res) => {
       return undefined;
     })// then
     .catch((err) => {
+      if (err instanceof SyntaxError) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify({ error: 'invalid request: body required' }));
+        res.end();
+        return undefined;  
+      }
+        console.log(err instanceof SyntaxError, 'error');
       res.writeHead(400, { 'Content-Type': 'text/plain' });
       res.write('BAD REQUEST', err);
       res.end();
