@@ -15,12 +15,12 @@ module.exports = function bodyParser(req) {
     let message = '';
     req.on('data', (data) => {
       message += data.toString();
-    });//this we dont want to change-- data comes in in chunks, so we concatenate
+    });// this we dont want to change-- data comes in in chunks, so we concatenate
 
     req.on('end', () => {
       try {
         req.body = JSON.parse(message);// everything together-- once all is received
-        console.log('body-parser, what req: ', req.body);
+        // console.log('body-parser, what req: ', req.body);
         return resolve(req);
       } catch (err) {
         return reject(err);
